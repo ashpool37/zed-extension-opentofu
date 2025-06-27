@@ -1,6 +1,6 @@
-# Zed Terraform
+# Zed OpenTofu
 
-A [Terraform](https://www.terraform.io/) extension for [Zed](https://zed.dev).
+An [OpenTofu](https://www.opentofu.org/) extension for [Zed](https://zed.dev).
 
 ## Development
 

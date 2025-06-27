@@ -1,13 +1,13 @@
 [package]
-name = "zed_terraform"
+name = "zed_opentofu"
 version = "0.1.3"
 edition = "2021"
 publish = false
 license = "Apache-2.0"
 
 [lib]
-path = "src/terraform.rs"
+path = "src/opentofu.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-zed_extension_api = "0.1.0"
+zed_extension_api = "0.6.0"

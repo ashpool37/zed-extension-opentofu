@@ -1,15 +1,19 @@
-id = "terraform"
-name = "Terraform"
-description = "Terraform support."
+id = "opentofu"
+name = "OpenTofu"
+description = "OpenTofu support."
 version = "0.1.3"
 schema_version = 1
-authors = ["Caius Durling <dev@caius.name>", "Daniel Banck <dbanck@users.noreply.github.com>"]
-repository = "https://github.com/zed-extensions/terraform"
+authors = [
+    "Caius Durling <dev@caius.name>",
+    "Daniel Banck <dbanck@users.noreply.github.com>",
+    "Artem Zhurikhin <github.code@ash.pw>",
+]
+repository = "https://github.com/ashpool37/zed-extension-opentofu"
 
-[language_servers.terraform-ls]
-name = "Terraform Language Server"
-languages = ["Terraform", "Terraform Vars"]
-language_ids = { Terraform = "terraform", "Terraform Vars" = "terraform-vars" }
+[language_servers.tofu-ls]
+name = "OpenTofu Language Server"
+languages = ["OpenTofu", "OpenTofu Vars"]
+language_ids = { OpenTofu = "opentofu", "OpenTofu Vars" = "opentofu-vars" }
 # TODO: file issue for server supported code actions
 # TODO: reenable default actions / delete override
 code_action_kinds = []

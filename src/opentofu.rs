@@ -2,17 +2,17 @@ use std::fs;
 use zed::LanguageServerId;
 use zed_extension_api::{self as zed, Result};
 
-struct TerraformExtension {
+struct OpenTofuExtension {
     cached_binary_path: Option<String>,
 }
 
-impl TerraformExtension {
+impl OpenTofuExtension {
     fn language_server_binary_path(
         &mut self,
         language_server_id: &LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<String> {
-        if let Some(path) = worktree.which("terraform-ls") {
+        if let Some(path) = worktree.which("tofu-ls") {
             return Ok(path);
         }
 
@@ -27,7 +27,7 @@ impl TerraformExtension {
             &zed::LanguageServerInstallationStatus::CheckingForUpdate,
         );
         let release = zed::latest_github_release(
-            "hashicorp/terraform-ls",
+            "opentofu/tofu-ls",
             zed::GithubReleaseOptions {
                 require_assets: false,
                 pre_release: false,
@@ -36,22 +36,22 @@ impl TerraformExtension {
 
         let (platform, arch) = zed::current_platform();
         let download_url = format!(
-            "https://releases.hashicorp.com/terraform-ls/{version}/terraform-ls_{version}_{os}_{arch}.zip",
-            version = release.version.strip_prefix('v').unwrap_or(&release.version),
+            "https://github.com/opentofu/tofu-ls/releases/download/{version}/tofu-ls_{os}_{arch}.tar.gz",
+            version = &release.version,
             os = match platform {
-                zed::Os::Mac => "darwin",
-                zed::Os::Linux => "linux",
-                zed::Os::Windows => "windows",
+                zed::Os::Mac => "Darwin",
+                zed::Os::Linux => "Linux",
+                zed::Os::Windows => "Windows",
             },
             arch = match arch {
                 zed::Architecture::Aarch64 => "arm64",
-                zed::Architecture::X86 => "386",
-                zed::Architecture::X8664 => "amd64",
+                zed::Architecture::X86 => "i386",
+                zed::Architecture::X8664 => "x86_64",
             },
         );
 
-        let version_dir = format!("terraform-ls-{}", release.version);
-        let binary_path = format!("{version_dir}/terraform-ls");
+        let version_dir = format!("tofu-ls-{}", release.version);
+        let binary_path = format!("{version_dir}/tofu-ls");
 
         if !fs::metadata(&binary_path).map_or(false, |stat| stat.is_file()) {
             zed::set_language_server_installation_status(
@@ -59,8 +59,12 @@ impl TerraformExtension {
                 &zed::LanguageServerInstallationStatus::Downloading,
             );
 
-            zed::download_file(&download_url, &version_dir, zed::DownloadedFileType::Zip)
-                .map_err(|e| format!("failed to download file: {e}"))?;
+            zed::download_file(
+                &download_url,
+                &version_dir,
+                zed::DownloadedFileType::GzipTar,
+            )
+            .map_err(|e| format!("failed to download file: {e}"))?;
 
             zed::make_file_executable(&binary_path)?;
 
@@ -79,7 +83,7 @@ impl TerraformExtension {
     }
 }
 
-impl zed::Extension for TerraformExtension {
+impl zed::Extension for OpenTofuExtension {
     fn new() -> Self {
         Self {
             cached_binary_path: None,
@@ -99,4 +103,4 @@ impl zed::Extension for TerraformExtension {
     }
 }
 
-zed::register_extension!(TerraformExtension);
+zed::register_extension!(OpenTofuExtension);
