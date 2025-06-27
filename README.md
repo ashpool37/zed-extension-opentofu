@@ -1,6 +1,7 @@
 # Zed OpenTofu
 
 An [OpenTofu](https://www.opentofu.org/) extension for [Zed](https://zed.dev).
+Forked and adapted from the official [Terraform extension](https://github.com/zed-extensions/terraform).
 
 ## File association conflicts
 
